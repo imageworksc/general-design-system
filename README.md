@@ -7,15 +7,21 @@ client. What does not change is the geometry — how far apart things sit, how
 large text gets, how wide a line may run, how a layout divides, and how all of
 it behaves from a 320px phone to a 5K display.
 
-Two stylesheets:
+What ships:
 
 | | |
 | --- | --- |
 | **[`system.css`](system.css)** | The geometry. Complete, no blanks, drop it in as-is. |
 | **[`brand.template.css`](brand.template.css)** | The paint. Only blanks — colours, the typeface, the one radius. |
+| **[`index.template.html`](index.template.html)** | A starter page with the primitives already assembled: hero, a card grid, a split, a ruled list, a FAQ, a form and a closing band. |
+| **[`reveal.js`](reveal.js)** | Scroll entrances, if the page uses them. Delete it if not. |
 
-And **[`CLAUDE.md`](CLAUDE.md)** — the guidelines behind both, written so an AI
-assistant or a new developer works inside the system instead of around it.
+And **[`CLAUDE.md`](CLAUDE.md)** — the guidelines behind all of it, written so
+an AI assistant or a new developer works inside the system instead of around it.
+
+**[`.claude/skills/client-page/`](.claude/skills/client-page/SKILL.md)** is the build
+procedure as an invocable skill — `/client-page` in Claude Code, and Claude
+reaches for it on its own when the task is a client page.
 
 **[`decisions/`](decisions/)** holds eight records on the choices that shape
 more than the rule they sit on — why the root steps, why the shell stops, why a
@@ -64,15 +70,18 @@ margins, and that is the right answer rather than a compromise.
 <link rel="stylesheet" href="brand.css">   <!-- your filled-in copy -->
 ```
 
-1. **Drop in `system.css` unchanged.** It has no blanks.
-2. **Copy `brand.template.css` to `brand.css`** and fill in the primitives.
+1. **Start from `index.template.html`.** It carries the skip link, the icon
+   sheet and six section shapes. Delete what the copy does not need rather
+   than inventing what it does not have.
+2. **Drop in `system.css` unchanged.** It has no blanks.
+3. **Copy `brand.template.css` to `brand.css`** and fill in the primitives.
    Take the values out of the client's live stylesheet — not a screenshot, not
    a brand PDF. A brand guide says the blue is one thing; the site has been
    shipping something slightly different for years, and that is what people
    recognise.
-3. **Build** with the layout primitives — `.wrap`, `.band`, `.stack`,
+4. **Build** with the layout primitives — `.wrap`, `.band`, `.stack`,
    `.cluster`, `.split` — and the twelve-column `.grid`.
-4. **Write the decisions down** as you make them, in [`decisions/`](decisions/).
+5. **Write the decisions down** as you make them, in [`decisions/`](decisions/).
    Template in that folder, and in CLAUDE.md §12.
 
 ### What goes where

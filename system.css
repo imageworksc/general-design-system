@@ -227,6 +227,22 @@ html { --nav-h: 0px; scroll-padding-top: calc(var(--nav-h) + var(--space-4)); }
 .wrap--content { max-width: calc(var(--w-content) + var(--gutter) * 2); }
 .wrap--wide { max-width: calc(var(--w-wide) + var(--gutter) * 2); }
 
+/* A child of a .stack shrinks to its content, because the stack ranges left.
+   This puts it back to the full width. */
+.w-full { width: 100%; }
+
+/* Two form fields side by side. Breaks at 640px, not at the .split breakpoint —
+   a pair of fields sits comfortably on a small tablet where a pair of content
+   columns does not. */
+.field-row {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 40rem) {
+  .field-row { grid-template-columns: 1fr 1fr; }
+}
+
 /* A full-width horizontal slab. Alternate grounds so the page reads in
    sections rather than one scroll. */
 .band { padding-block: var(--band-y); }
@@ -383,6 +399,75 @@ html { --nav-h: 0px; scroll-padding-top: calc(var(--nav-h) + var(--space-4)); }
   border-block-end: var(--hairline) solid;
 }
 .rule-list > li:first-child { border-block-start: var(--hairline) solid; }
+
+/* A kicker above a heading. The dot is currentColor, so the brand layer sets
+   one colour and both follow. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5625rem;            /* 9px */
+  font-size: var(--text-xs);
+  font-weight: 800;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.kicker::before {
+  content: '';
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-radius: var(--radius-round);
+  background: currentColor;
+  flex: none;
+}
+
+/* Disclosure. Native <details>: the browser toggles it, announces the state,
+   keeps closed copy out of the accessibility tree and findable by in-page
+   search. An accordion script gets at least one of those wrong. */
+.disclosure { border-block-end: var(--hairline) solid; }
+.disclosure:first-of-type { border-block-start: var(--hairline) solid; }
+
+.disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  min-height: var(--touch-min);
+  padding-block: var(--space-4);
+  font-size: var(--text-lead);
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.disclosure > summary::-webkit-details-marker { display: none; }
+
+/* A chevron drawn from two borders — no icon to ship, and it takes the
+   summary's own colour. */
+.disclosure > summary::after {
+  content: '';
+  inline-size: 0.5rem;
+  block-size: 0.5rem;
+  border-inline-end: 2px solid;
+  border-block-end: 2px solid;
+  rotate: 45deg;
+  translate: 0 -25%;
+  flex: none;
+  transition: rotate var(--duration) var(--ease);
+}
+.disclosure[open] > summary::after { rotate: -135deg; translate: 0 25%; }
+
+.disclosure > :not(summary) { padding-block-end: var(--space-5); }
+
+/* Browsers without interpolate-size get a clean snap and lose nothing else. */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+  .disclosure::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition: block-size var(--duration) var(--ease),
+                content-visibility var(--duration) allow-discrete;
+  }
+  .disclosure[open]::details-content { block-size: auto; }
+}
 
 /* --------------------------------------------------------------------------
    12 · ACCESSIBILITY GEOMETRY

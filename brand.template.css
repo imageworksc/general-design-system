@@ -147,6 +147,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .rule-list > li { border-color: var(--border-hairline); }
 
+.kicker { color: var(--color-action-text); }
+.band--dark .kicker { color: var(--color-action); }
+
+.disclosure { border-color: var(--border-hairline); }
+.disclosure > summary { color: var(--color-heading); }
+.disclosure > summary:hover { color: var(--color-link); }
+.disclosure > :not(summary) { color: var(--color-muted); max-width: var(--measure); }
+
 .chip { background: var(--danger-soft); color: var(--color-action-text); }
 
 :where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {

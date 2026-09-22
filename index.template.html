@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- ===========================================================================
+     Every CAPITALISED value below is a placeholder. None may reach a review
+     link: if a route or an image is not confirmed yet, it goes in the README's
+     "before this goes live" list and you say so when handing the page over.
+     =========================================================================== -->
+<title>PAGE NAME | CLIENT</title>
+<meta name="description" content="ONE SENTENCE, UNDER 155 CHARACTERS.">
+<meta name="theme-color" content="#000000">
+<link rel="canonical" href="https://CLIENT.COM/PAGE">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CLIENT">
+<meta property="og:title" content="PAGE NAME">
+<meta property="og:description" content="ONE SENTENCE.">
+<meta property="og:url" content="https://CLIENT.COM/PAGE">
+<meta property="og:image" content="https://CLIENT.COM/og/PAGE.png"><!-- real 1200×630 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="PAGE NAME">
+<meta name="twitter:description" content="ONE SENTENCE.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://CLIENT.COM/#organization",
+      "name": "CLIENT",
+      "url": "https://CLIENT.COM/"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://CLIENT.COM/PAGE",
+      "url": "https://CLIENT.COM/PAGE",
+      "name": "PAGE NAME",
+      "isPartOf": { "@id": "https://CLIENT.COM/#organization" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://CLIENT.COM/" },
+          { "@type": "ListItem", "position": 2, "name": "PAGE NAME", "item": "https://CLIENT.COM/PAGE" }
+        ]
+      }
+    }
+  ]
+}
+</script>
+
+<!-- Geometry first, then paint. Never the other way round. -->
+<link rel="stylesheet" href="system.css">
+<link rel="stylesheet" href="brand.css">
+<script src="reveal.js" defer></script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===========================================================================
+     ICONS — one symbol sheet, strokes in currentColor so each icon takes the
+     colour of whatever it sits in. Delete the ones the page does not use.
+     =========================================================================== -->
+<svg width="0" height="0" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 16 16">
+      <path d="M3 8.6l3.1 3.1L13 4.8" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="main">
+
+  <!-- 1 · HERO ------------------------------------------------------------ -->
+  <section class="band" aria-labelledby="hero-title">
+    <div class="wrap stack stack--loose" data-reveal>
+      <p class="kicker">KICKER</p>
+      <h1 id="hero-title">THE HEADLINE, WHICH SHOULD SAY WHAT THIS IS</h1>
+      <p class="lead">THE INTRO PARAGRAPH. ONE OR TWO SENTENCES THAT EXPLAIN THE
+        POINT OR THE BENEFIT. <strong>THE PART THAT MATTERS MOST.</strong></p>
+      <div class="cluster cluster--buttons">
+        <a class="btn btn--solid" href="#contact">PRIMARY ACTION
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--quiet" href="#features">SECONDARY</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · A ROW OF EQUAL THINGS — .grid -------------------------------------
+       .grid--3 is three across, two-up at 640px, stacked below. For a set
+       whose count is not known ahead of time use .grid--auto and set
+       --card-min instead. Do NOT add a fourth column on large displays.
+       ----------------------------------------------------------------------- -->
+  <section class="band band--tint" aria-labelledby="features-title" id="features">
+    <div class="wrap stack" data-reveal>
+      <p class="kicker">KICKER</p>
+      <h2 id="features-title">THE SECTION HEADING</h2>
+      <p class="lead">WHAT THIS SECTION IS ABOUT, IN ONE SENTENCE.</p>
+
+      <div class="grid grid--3 w-full">
+        <article class="card">
+          <h3>FIRST</h3>
+          <p>WHAT IT IS AND WHY IT MATTERS. TWO OR THREE LINES.</p>
+        </article>
+        <article class="card">
+          <h3>SECOND</h3>
+          <p>WHAT IT IS AND WHY IT MATTERS. TWO OR THREE LINES.</p>
+        </article>
+        <article class="card">
+          <h3>THIRD</h3>
+          <p>WHAT IT IS AND WHY IT MATTERS. TWO OR THREE LINES.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · COPY BESIDE SOMETHING — .split ------------------------------------
+       Two columns above 960px, one below. --sidebar is 2fr 1fr, --aside 1fr 2fr.
+       ----------------------------------------------------------------------- -->
+  <section class="band" aria-labelledby="detail-title">
+    <div class="wrap split split--sidebar" data-reveal>
+      <div class="stack">
+        <p class="kicker">KICKER</p>
+        <h2 id="detail-title">THE HEADING FOR THIS ONE</h2>
+        <p>THE BODY COPY. THE MEASURE IS CAPPED AT 66 CHARACTERS BY THE SYSTEM,
+          SO THIS WILL WRAP WHERE IT SHOULD WITHOUT BEING TOLD.</p>
+        <p>A SECOND PARAGRAPH IF THE COPY HAS ONE.</p>
+        <a class="btn btn--quiet" href="#contact">AN ACTION</a>
+      </div>
+
+      <!-- A ruled list: rows between hairlines, a chip on each. -->
+      <ul class="rule-list">
+        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <span>FIRST CLAIM</span></li>
+        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <span>SECOND CLAIM</span></li>
+        <li><span class="chip"><svg aria-hidden="true"><use href="#i-check"/></svg></span>
+          <span>THIRD CLAIM</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 · QUESTIONS — native <details> ---------------------------------------
+       No accordion script. The browser toggles it, announces the state, keeps
+       closed copy out of the accessibility tree and findable by in-page search.
+       Add name="faq" to every <details> to make them mutually exclusive.
+       ----------------------------------------------------------------------- -->
+  <section class="band band--tint" aria-labelledby="faq-title">
+    <div class="wrap wrap--content stack" data-reveal>
+      <h2 id="faq-title">QUESTIONS</h2>
+
+      <div class="w-full">
+        <details class="disclosure">
+          <summary>THE FIRST QUESTION?</summary>
+          <p>THE ANSWER.</p>
+        </details>
+        <details class="disclosure">
+          <summary>THE SECOND QUESTION?</summary>
+          <p>THE ANSWER.</p>
+        </details>
+        <details class="disclosure">
+          <summary>THE THIRD QUESTION?</summary>
+          <p>THE ANSWER.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · A FORM -------------------------------------------------------------
+       Validation is :user-invalid, never :invalid — a required field must not
+       turn red before it has been touched. No script stands between the form
+       and whatever receives it.
+       ----------------------------------------------------------------------- -->
+  <section class="band" aria-labelledby="form-title" id="contact">
+    <div class="wrap wrap--prose stack" data-reveal>
+      <h2 id="form-title">GET IN TOUCH</h2>
+
+      <form class="stack w-full" action="POST-ENDPOINT" method="post">
+        <div class="field-row w-full">
+          <p class="stack stack--tight w-full">
+            <label for="f-name">Name</label>
+            <input class="field" id="f-name" name="name" type="text"
+                   autocomplete="name" required>
+          </p>
+          <p class="stack stack--tight w-full">
+            <label for="f-email">Email</label>
+            <input class="field" id="f-email" name="email" type="email"
+                   autocomplete="email" required>
+          </p>
+        </div>
+
+        <p class="stack stack--tight w-full">
+          <label for="f-msg">How can we help?</label>
+          <textarea class="field field--area" id="f-msg" name="message" rows="6"></textarea>
+        </p>
+
+        <button class="btn btn--solid" type="submit">SEND</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 6 · THE CLOSING CALL — one per page, at the end ---------------------- -->
+  <section class="band band--dark" aria-labelledby="cta-title">
+    <div class="wrap stack stack--center" data-reveal>
+      <p class="kicker">KICKER</p>
+      <h2 id="cta-title">THE CLOSING HEADLINE</h2>
+      <p class="lead">ONE SENTENCE THAT EARNS THE CLICK.</p>
+      <div class="cluster cluster--buttons">
+        <a class="btn btn--solid btn--lg" href="#contact">PRIMARY ACTION
+          <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--quiet btn--lg" href="tel:+10000000000">OR CALL</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>
