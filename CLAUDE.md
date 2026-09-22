@@ -1,385 +1,387 @@
-# Landing page guidelines
+# Structural design system
 
-The rules for building a client landing page — any client. They are about
-method, not about one brand's colours: fill in the brand block below and the
-rest applies as written.
+Space, size, measure, grid and layout for any brand.
 
-Read this before writing anything. Where a rule below and the client's own
-live stylesheet disagree, **the client's stylesheet wins** — see §2.
+**There is not one colour and not one typeface in this system, and there should
+never be.** Those belong to the brand and change with every client. What does
+not change is the geometry: how far apart things sit, how large text gets, how
+wide a line is allowed to run, how a layout divides, and how all of it behaves
+from a 320px phone to a 5K display.
 
----
-
-## 1. The brand block
-
-Fill this in first. Every rule after it reads from here, and a page cannot be
-started until the top half is answered.
-
-```
-CLIENT            ____________________
-LIVE SITE         ____________________   the source for everything below
-PAGE              ____________________   what this page is, in one line
-SOURCE COPY       ____________________   the document the page carries
-
-BRAND
-  Primary         #______   the colour that carries headings
-  Action          #______   the one that carries the button
-  Accent          #______   emphasis inside a heading, if there is one
-  Ink             #______   body copy
-  Muted           #______   secondary copy
-  Surface tint    #______   the alternate band ground
-
-TYPE
-  Typeface        ____________________   + licence and where the file is
-  Weights         ____________________   body / emphasis / headings
-
-SHAPE
-  Corner          ____px    one value, everywhere
-  Shell           ____px    the content column at the design width
-
-FACTS             the things the page may state as true
-  Founded         ______
-  Address         ______
-  Phone / email   ______
-  Anything else   ______
-
-ROUTES            every link the page will carry, confirmed
-  CTA             ______
-  Secondary       ______
-```
-
-**Nothing below the FACTS line may be invented.** If it is not here and not in
-the source copy, it does not go on the page — ask.
-
-### Where the values come from
-
-If the client has a live site, **take the values out of its stylesheet, not out
-of a screenshot and not out of a brand PDF.** Open the site, read the computed
-values, and copy them exactly. A brand guide says the blue is `#1266b5`; the
-site has been shipping `#1266B5` at 94% opacity over a tint for three years and
-that is what people recognise.
-
-If there is no live site, the brand guide is the source, and the first page
-becomes the reference every later page is measured against — so it is worth
-being slow about.
+Drop in [`system.css`](system.css), add the brand's palette and typeface on
+top, and the structure is already settled.
 
 ---
 
-## 2. Build discipline
+## 1. What this owns, and what it does not
 
-**Three files.** `index.html`, `styles.css`, `script.js`. Nothing crosses
-between them: no `<style>` block, no `style=` attribute, no `<script>` body,
-and the script never writes a style.
+| This system decides | The brand decides |
+| --- | --- |
+| The spacing scale and every gap | Every colour |
+| Type **sizes**, line heights, tracking | The **typeface** |
+| Line length and column widths | Weight choices within the scale |
+| The grid and how it collapses | Border and shadow *style* |
+| Control heights, insets, icon sizes | The corner radius value |
+| Every breakpoint, mobile through 5K | Tone, imagery, iconography |
+| Focus ring geometry, touch targets | Focus ring colour |
 
-The one exception is JSON-LD in the head, which is structured data rather than
-behaviour — moved to a file, crawlers would not read it.
+The brand layer is a second stylesheet that assigns colour to the semantic
+slots this one leaves open. It never changes a size, a gap or a breakpoint — if
+it wants to, the system is wrong and should be fixed here.
 
-The script may set exactly one kind of thing: a custom property holding a
-measurement the stylesheet cannot know ahead of time, like a rendered label's
-width. What that measurement *does* is still decided in the CSS.
-
-**No dependencies.** No framework, no build step, no CDN. The page opens in a
-browser from the filesystem and works. This is not minimalism for its own sake
-— these pages get pasted into a CMS, and every dependency is a thing that can
-be missing on the other side.
-
-**No external network requests.** The typeface is embedded as a base64
-`@font-face`; icons are an inline SVG symbol sheet. A Google Fonts link costs a
-DNS lookup, a handshake, a CSS fetch and only then the font — most of a second
-of invisible text on the one screen that has to land.
-
-**No chrome, unless asked.** A landing page dropped into a client's site
-carries no header and no footer: it is the article, and the chrome belongs to
-whatever it is placed into. Confirm which you are building.
+**One exception:** `--radius`. The system holds it at `2px` because a value is
+needed, and insists only that there be *one* — pick a radius and hold it across
+buttons, cards, inputs and panels. A system with three radii has none. The
+brand may override that single token.
 
 ---
 
-## 3. Scope is the copy
+## 2. The one idea
 
-The page carries the sections of the source copy. **Nothing else.** This is the
-rule people break, and it is the one that costs a client relationship.
-
-- Do not invent a statistic, testimonial, price, client name, award, or
-  years-in-business figure.
-- Do not add a section because the layout looks thin. If a band feels empty,
-  the fix is the design, not filler.
-- Do not soften or rewrite a client's claim to make it read better.
-- Do not write an FAQ the client did not write.
-
-Everything factual on the page traces to the source copy or to the FACTS block.
-If the page needs something that is in neither, **say so and ask** — new copy
-comes from the client.
-
-**Before building, list the page's sections back to whoever handed over the
-copy** — numbered, in order, with what each one carries. That list is the page.
-Flag in the same message anything missing, any claim you cannot source, any
-route you cannot confirm.
-
----
-
-## 4. Tokens
-
-Three layers, each named for what it is rather than what it looks like.
+**Everything structural is in `rem`, and the root font size steps at four
+widths.** That is the whole mechanism, and it is what makes the system work on
+a 4K panel without forty per-breakpoint overrides.
 
 ```css
-:root {
-  /* 1 · primitives — the raw brand values, named literally */
-  --navy: #143c66;
-  --green: #80c34a;
-
-  /* 2 · semantic — what those values are FOR. Rules read these. */
-  --color-heading: var(--navy);
-  --color-action: var(--green);
-  --surface-band: var(--tint);
-  --border-hairline: var(--grey-200);
-
-  /* 3 · component — this page's own sizes, declared once, prefixed */
-  --xx-h1: clamp(32px, 4.2vw, 48px);
-  --xx-icon: 48px;
-}
+html { font-size: 100%; }                                   /* 16px */
+@media (min-width: 1800px) { html { font-size: 112.5%; } }  /* 18px */
+@media (min-width: 2400px) { html { font-size: 125%; } }    /* 20px */
+@media (min-width: 3200px) { html { font-size: 143.75%; } } /* 23px */
 ```
 
-The point of layer 2 is that a dark band re-points the semantic names and every
-child flips for free, instead of each component needing a dark variant:
+Because the column, the type, the gaps and the control heights are all `rem`,
+they rise together. The page is not re-laid-out on a large display — it is
+*scaled*, and the proportions that were tuned at the design width survive
+intact. A line of prose measures the same 66 characters on a phone and on a 5K
+panel.
 
-```css
-.band--dark {
-  --color-heading: #fff;
-  --color-text: rgba(255, 255, 255, .82);
-  --border-hairline: rgba(255, 255, 255, .16);
-}
-```
+**Percentages, not pixels.** A visitor who has raised their browser's default
+text size keeps that increase — their setting multiplies ours instead of being
+overwritten by it. `font-size: 18px` on `html` silently discards it.
 
-**Never re-point a primitive to its opposite.** `--navy: #ffffff` inside a dark
-band works and is the thing that stops every new reader. That is what layer 2
-is for.
-
-**Every size a page uses is a token**, declared once at the head of the page's
-block behind a prefix. No bare pixel size anywhere else. That is what lets the
-whole page move from one place when the range is extended, instead of restating
-forty rules.
-
-Keep derived things derived: `calc(var(--xx-icon) * 22 / 48)` sizes a mark's
-icon off the mark itself.
-
-**One corner.** Pick a radius and hold it everywhere — buttons, cards, inputs,
-panels. A system with three radii has none. The exception worth making is a
-circle for an icon well, which reads as deliberate contrast rather than drift.
+**What stays in pixels:** hairlines, the focus ring, and touch minimums. These
+should not grow with the page — a 1px border is a 1px border, and 44px is 44px
+because that is the size of a fingertip, not a proportion of a column.
 
 ---
 
-## 5. Type
+## 3. Space
 
-**Sizes are ranges, not numbers.** Every step is a `clamp()`: the floor is what
-a 320px phone gets, the cap what the design width gets.
+A 4px grid in `rem`. The names are the multiple, not a t-shirt size, so
+`--space-6` is six units — 24px at the base, 34.5px at 4K.
 
-```css
---step-0: clamp(16px, .25vw + 15.2px, 17px);   /* body */
---step-1: clamp(16.5px, .4vw + 15.5px, 18px);  /* lead */
---step-2: clamp(22px, 1.1vw + 18px, 28px);     /* h3  */
---step-3: clamp(28px, 2.6vw + 18px, 44px);     /* h2  */
---step-4: clamp(30px, 3vw + 20px, 56px);       /* h1  */
+```
+--space-1   4px      --space-8    32px
+--space-2   8px      --space-10   40px
+--space-3  12px      --space-12   48px
+--space-4  16px      --space-16   64px
+--space-5  20px      --space-20   80px
+--space-6  24px      --space-24   96px
+                     --space-32  128px
 ```
 
-These hold regardless of brand:
+- **Between bands:** `--band-y`, which is `clamp(--space-12, 8vw, --space-24)`
+  — 48px on a phone, 96px at the design width, and more again at each root
+  step. Fluid inside a step so a phone does not need its own rule.
+- **Between paragraphs:** `--space-5` (20px). Between a heading and its lead:
+  `--space-3`. Inside a `.stack`: `--space-5` by default.
+- **Page side padding:** `--gutter`, `clamp(1.125rem, 4vw, 2.5rem)` — 18px on a
+  phone, 40px at the design width.
 
-| | Desktop | Mobile |
+Use whitespace generously; do not create large empty areas for their own sake.
+A band that feels empty needs better content or a snugger `--band-y`, not more
+of both.
+
+---
+
+## 4. Type sizes
+
+Typeface-agnostic by design. Each step is fluid between a floor — what a 320px
+phone gets — and a cap, reached at the design width, and the whole ladder rises
+again at each root step.
+
+| Token | 320px | design width | ≥1800 | ≥2400 | ≥3200 |
+| --- | --- | --- | --- | --- | --- |
+| `--text-display` | 32 | 72 | 81 | 90 | 104 |
+| `--text-h1` | 30 | 56 | 63 | 70 | 81 |
+| `--text-h2` | 28 | 44 | 50 | 55 | 63 |
+| `--text-h3` | 22 | 28 | 32 | 35 | 40 |
+| `--text-lead` | 16.5 | 18 | 20 | 22.5 | 26 |
+| `--text-base` | 16 | 17 | 19 | 21 | 24.5 |
+| `--text-sm` | 14 | 15 | 17 | 19 | 21.5 |
+| `--text-xs` | 12.5 | 13.5 | 15 | 17 | 19.5 |
+
+**16px is a floor, not a preference.** Below it body copy is hard to read, and
+iOS zooms the page on any focused input under 16px. `--text-sm` and `--text-xs`
+exist for chrome — a caption, a tag, a skip link — never for body copy.
+
+### Line height and tracking
+
+Tightens as size grows. A display line at 1.6 looks loose; a body line at 1.2
+is unreadable.
+
+```
+--leading-body      1.6      --tracking-heading   -.018em
+--leading-lead      1.7      --tracking-display   -.032em
+--leading-heading   1.2
+--leading-display   1.08
+```
+
+### Adapting to a typeface
+
+The sizes above assume a typeface of ordinary x-height. When the brand face
+lands, check the body size against a known-good reference at the same
+measurement:
+
+- **Small x-height** (Garamond, Baskerville, many display serifs) — raise the
+  `--text-base` floor and cap by about 1px. The ladder above it follows.
+- **Large x-height** (Inter, Söhne, most modern UI sans) — leave it, or drop
+  the cap by 0.5px if it reads heavy.
+- **Condensed or wide faces** — the sizes hold; the `ch`-based measures do the
+  adjusting on their own, since `ch` is derived from the face itself.
+
+That is the only place the typeface touches this system.
+
+---
+
+## 5. Width and measure
+
+Two mechanisms, deliberately overlapping: a container width in `rem`, and a
+line length in `ch`. Whichever is narrower wins, so a long line is impossible
+either way.
+
+```
+--w-prose    43rem     688px at base   one column of body copy
+--w-content  55rem     880px           prose plus a figure or an aside
+--w-shell    73.75rem  1180px          the page's main column
+--w-wide     85rem     1360px          a grid that earns extra room
+```
+
+```
+--measure           66ch    any run of prose
+--measure-tight     46ch    a ruled list, a caption
+--measure-heading   21ch    a section heading
+--measure-display   16ch    a hero headline
+```
+
+A heading is capped tighter than body copy on purpose: a ragged left column of
+three short lines reads faster than one wide centred block.
+
+`p` carries `max-width: var(--measure)` in the base layer, so the cap applies
+whether or not anyone remembers it.
+
+---
+
+## 6. The grid
+
+Twelve columns, because twelve divides by 2, 3, 4 and 6 — every split a
+marketing page needs. It collapses twice.
+
+| Viewport | Columns | Default child span |
 | --- | --- | --- |
-| Body | 17–18px, **never under 16px** | 16–17px |
-| H1 | 42–56px | 30–36px |
-| H2 | 32–42px | 26–32px |
-| H3 | 22–28px | — |
-| Body line-height | ~1.6 | |
-| Heading line-height | 1.1–1.25 | |
+| < 640px | 4 | full row |
+| 640–767px | 6 | full row, or `--span-sm` |
+| ≥ 768px | 12 | `--span` |
 
-Guidelines, not specifications — hierarchy matters more than hitting a number.
-But **16px is a floor, not a guideline**: below it, body copy is hard to read
-and iOS zooms the page on any input.
-
-- **Measure**: cap prose at `66ch`. A heading caps tighter — around `21ch` — and
-  a hero headline tighter still, because a ragged left column reads faster than
-  a wide centred block.
-- **Negative tracking** on large headings, roughly `-.02em`, more at hero size.
-- `text-wrap: balance` on headings, `pretty` on paragraphs.
-- Every major section reads **headline → subhead → body**, largest to smallest.
-  Do not put decorative eyebrow copy above a headline unless it was asked for.
-
----
-
-## 6. Layout
-
-```css
-.wrap {                       /* every band's inner column */
-  width: 100%;
-  max-width: var(--shell);
-  margin-inline: auto;
-  padding-inline: var(--gutter);
-}
-
-.band { padding-block: var(--band-y); }
+```html
+<div class="grid grid--3">     <!-- three across, two-up at 640, stacked below -->
+  <article>…</article>
+  <article>…</article>
+  <article>…</article>
+</div>
 ```
 
-A section is always: `<section class="band …">` → `<div class="wrap stack">` →
-kicker, heading, lead, content.
+`.grid--2`, `.grid--3` and `.grid--4` cover the common cases. For anything
+else, set `--span` (and `--span-sm` if the six-column step should differ) on
+the children.
 
-- **Shell** 1200–1280px at the design width; **reading measure** 650–720px
-  inside it. Full-width backgrounds are fine; the content stays on the grid.
-- **Section spacing** 80–120px desktop, **paragraph spacing** 20–28px.
-- **Page padding** 32–40px desktop, 18–24px mobile.
-- **Alternate grounds** — white, then a tint, then white — so the page reads in
-  slabs rather than one scroll.
-- Give the page **one closing call**, not a CTA after every section.
+**When the number of items is not known ahead of time**, use `.grid--auto` and
+set `--card-min` — the narrowest a card may get before the row drops one. It
+reflows on its own and needs no breakpoint.
+
+**Do not add columns just because a large display has room.** Three cards at
+1180px are three cards at 3840px, larger. Four columns at 4K and three
+everywhere else means two layouts to maintain and a page that looks like a
+different product on a big monitor.
 
 ---
 
-## 7. Components
+## 7. Layout primitives
 
-A marketing page needs about eight things. Build them once, as recipes, and
-reuse them:
+Five, and almost every section is a combination of them.
 
 | | |
 | --- | --- |
-| **Button** | 52–56px tall, ~26px inset, 16px/700, the system corner. One solid primary per view; everything else is a bordered quiet variant. Lift 3px on hover. |
-| **Link** | An underline that grows from the left on hover reads as considered; a permanent underline reads as a document. |
-| **Chip** | A small tinted circle holding an icon — the check beside a benefit. Always an icon, never text. |
-| **Card** | Corner + a near-white vertical gradient + one soft shadow. Define it once; every surface uses it. |
-| **Ruled list** | Rows between hairlines. Hover is a tint, not a move — five rows shifting under the cursor is busier than the content deserves. |
-| **Disclosure** | Native `<details>`. The browser toggles it, announces the state, keeps closed copy out of the accessibility tree and findable by in-page search. An accordion script gets at least one of those wrong. |
-| **Form field** | 52px tall, 16px minimum, the system corner. Focus moves the border to the action colour and adds a soft ring. Validate with `:user-invalid`, never `:invalid` — a required field must not turn red before it has been touched. |
-| **Closing band** | A dark or brand-gradient ground carrying the one primary call. |
+| `.wrap` | The page column: `--w-shell`, centred, with `--gutter` either side. Variants `--prose`, `--content`, `--wide`. |
+| `.band` | A full-width horizontal slab with `--band-y` top and bottom. Alternate grounds so the page reads in sections rather than as one scroll. |
+| `.stack` | Vertical rhythm inside a band — a column with one gap. `--tight`, `--loose`, `--center`. |
+| `.cluster` | A row that wraps instead of overflowing: button rows, tag rows, meta rows. |
+| `.split` | Two columns above 960px, one below. `--split-ratio` sets the division; `--sidebar` and `--aside` are the common ones. |
 
-Icons live in an SVG symbol sheet at the top of `<body>`, used as
-`<svg aria-hidden="true"><use href="#i-check"/></svg>`. Strokes are
-`currentColor` so they take the colour of whatever they sit in.
-
-**Do not use an icon beside every benefit or heading**, do not centre long runs
-of body copy, and do not use oversized numbers as decoration.
-
----
-
-## 8. Motion
-
-- **One easing token** for the whole page. Everything uses it.
-- Interaction `.25s`; colour and disclosure `.3–.4s`; entrances `.55–.8s`.
-- Animate `transform` and `opacity` only. Nothing that triggers layout.
-- Entrances reveal on scroll via `IntersectionObserver`, once per element. If
-  the observer is missing, reveal everything immediately — never leave content
-  hidden behind a feature check.
-- Ambient movement, if any, is slow and cheap: long periods, few elements.
-
-**Reduced motion is not optional.** Blanket the durations, then fix what the
-blanket gets wrong — anything that would snap to a wrong end frame, a marquee
-that should become a scrollable strip, a rail that should be given its final
-length outright. **Colour and tint changes stay. Only the travel goes.** Nothing
-may end up hidden.
-
----
-
-## 9. Accessibility
-
-The floor, not the ceiling. None of this is client-specific.
-
-- `:focus-visible` on everything interactive, with a visible ring. Never
-  `outline: none` without a replacement.
-- Tab all the way through before calling it done: nothing skipped, nothing
-  trapped, focus returns where it came from after a panel closes.
-- Semantic HTML first. A `<div>` with a click handler is a bug.
-- One `<h1>`. Headings descend without skipping. Every `<section>` takes
-  `aria-labelledby` pointing at its own heading.
-- Decoration is `aria-hidden="true"`.
-- **Check contrast on every pair**, especially a bright brand colour carrying
-  text — most brand greens and yellows fail on white and need a darker text
-  variant alongside the surface one.
-- Body copy never under 16px; inputs never under 16px.
-- A skip link, and a visually-hidden class for text the screen reader needs and
-  the eye does not.
-- `scroll-padding-top` so an anchor does not land under a fixed header.
-
----
-
-## 10. Performance
-
-- No external requests (§2).
-- Images sized, compressed, with real `alt` text — or `alt=""` if decorative.
-  `loading="lazy"` below the fold.
-- No horizontal scrolling at any width.
-- No tiny screenshots and no crowded controls on mobile; remove decoration that
-  does not help there.
-
----
-
-## 11. The head
+The canonical section:
 
 ```html
-<title>Page Name | Client</title>
-<meta name="description" content="…">
-<meta name="theme-color" content="#______">
-<link rel="canonical" href="…">
-<!-- Open Graph + Twitter, og:image a real 1200×630 file -->
-<script type="application/ld+json">{ "@context": "https://schema.org", "@graph": [ … ] }</script>
+<section class="band" aria-labelledby="s-title">
+  <div class="wrap stack" data-reveal>
+    <p class="kicker">Kicker</p>
+    <h2 id="s-title">The heading</h2>
+    <p class="lead">The lead paragraph.</p>
+    <!-- the section's own content -->
+  </div>
+</section>
 ```
 
-- **No `PLACEHOLDER` may ever reach a review link.** If a route or image is not
-  confirmed, it goes in the README's "before this goes live" list and you say so
-  out loud when handing over.
-- If the client's site already has sitewide `Organization` schema, this page's
-  `provider` is name + url only, so the two do not conflict.
+---
+
+## 8. Component geometry
+
+Shape only — no colour, no border style, no shadow colour.
+
+| | Value | |
+| --- | --- | --- |
+| Button height | `3.375rem` (54px) | `--lg` 58px, `--sm` 44px |
+| Button inset | `1.625rem` (26px) | |
+| Field height | `3.25rem` (52px) | textarea min 150px |
+| Field inset | `0.875rem` (14px) | font-size never under 16px |
+| Card padding | fluid `20–32px` × `24–40px` | |
+| Icon | 15px beside a label | 12px in a chip, 24px as a section mark |
+| Chip | 22px circle | the one place a circle belongs |
+| **Touch minimum** | **44px** | never scaled down, never overridden |
+
+Below 640px a `.cluster--buttons` gives each button the full row rather than
+letting two sit cramped side by side.
 
 ---
 
-## 12. The range
+## 9. The range
 
-Build and measure **320px → 5120px**. No horizontal overflow at any width, with
-every disclosure open.
+Built and measured **320px → 5120px**. No horizontal overflow at any width,
+with every disclosure open.
 
-**Down**, roughly: two-column grids collapse near 900px; dense rows tighten near
-700px; stat grids stack and buttons go full width near 640px; headlines held on
-one line are released near 560px.
+### First, the thing that confuses everyone
 
-**Up**: leave everything below ~1800px alone — the caps are the intended
-measure on a 1440 or 1920 display. Past that they stop being a measure and
-start being a stripe, so step the shell and the type together:
+**Test in CSS pixels, not device pixels.** A 4K laptop running at 200% scaling
+reports **1920 CSS pixels** — it is a 1920 display as far as the page is
+concerned, and nothing on this list applies to it. A 27" 4K monitor at 100%
+scaling reports **3840**, and that is the case the large steps exist for.
 
-| | Shell | Body | H1 |
-| --- | --- | --- | --- |
-| base | 1180–1280 | 16–17 | 36–56 |
-| ≥1800px | ~1320 | 18 | ~54 |
-| ≥2400px | ~1560 | 20 | ~62 |
-| ≥3200px | ~1840 | 23 | ~72 |
+If you open a page on a 4K screen and nothing changes, check the OS scaling
+before changing the CSS. In DevTools, set the viewport width directly.
 
-**Stop the shell growing** around 1840px. Past that, more width only lengthens
-the line — a 5120px viewport should get generous margins, not a wider column.
+### Down — mobile
+
+| Width | What it is | What happens |
+| --- | --- | --- |
+| **320px** | the floor we support | single column, `--gutter` 18px, grid 4-col, buttons full width |
+| **360px** | the most common small phone | nothing extra — the fluid clamps have already adjusted |
+| **390–430px** | current iPhone / large Android | the type ladder is mid-ramp; still one column |
+| **640px** | phone → tablet | grid goes to 6 columns; button rows sit side by side again |
+| **768px** | tablet portrait | grid goes to 12 columns |
+| **960px** | tablet landscape | `.split` becomes two columns |
+| **1180px** | the design width | `--w-shell` caps; every type step reaches its cap |
+
+On mobile, always:
+
+- **Single-column reading flow.** No multi-column bullet lists.
+- **No horizontal scrolling**, at any width, with every row open. A wide table
+  or code block scrolls inside its own container, never the page.
+- **44px touch minimum** on anything tappable, with space between targets.
+- **No tiny screenshots.** An image that needs pinching is better removed.
+- Drop decoration that does not help — ambient motion, background flourishes,
+  anything that costs bandwidth for nothing.
+
+### Up — large displays
+
+Nothing below 1800px is touched. On a 1440 or 1920 display the caps are the
+intended measure.
+
+| Step | Root | `--w-shell` | Body | H1 | Typical display |
+| --- | --- | --- | --- | --- | --- |
+| base | 16px | 1180px | 17 | 56 | up to 1920 |
+| **≥1800** | 18px | 1327px | 19 | 63 | 1920 at 100% |
+| **≥2400** | 20px | 1475px | 21 | 70 | 5K at default, 4K at 150% |
+| **≥3200** | 23px | 1696px | 24.5 | 81 | 4K at 100% |
+| — | — | — | — | — | 5120 (5K at 100%) uses the 3200 step |
+
+**Why it steps at all.** On a 3840px-wide panel, an 1180px column covers under
+a third of the screen, at a body size that is physically about half what the
+same value gives on a 1080p monitor at the same distance. Left alone, the page
+is not "clean" — it is a stripe of unreadably small text.
+
+**Why the shell stops.** It does not grow past ~1700px, and there is no fifth
+step for 5120px. Past that, extra width only lengthens the line, and a
+90-character line is worse to read, not better. A 5K viewport gets generous
+margins, and that is the correct answer rather than a compromise.
+
+**What not to do at 4K:**
+
+- Do not widen the text column beyond the measure.
+- Do not add grid columns (§6).
+- Do not scale images up past their native resolution — ship a 2× asset or
+  leave it at its size inside a larger column.
+- Do not introduce a layout that exists only there. One layout, scaled.
+
+### How to check it
+
+Set the viewport width directly rather than trusting a device preset:
+
+```
+320 · 360 · 390 · 430 · 640 · 768 · 960 · 1180 · 1440 · 1920 · 2560 · 3840 · 5120
+```
+
+At each one: no horizontal overflow, every disclosure open, and read a
+paragraph — if the line feels long, the measure is not being applied.
 
 ---
 
-## 13. Code style
+## 10. Accessibility geometry
+
+The parts of accessibility this system is responsible for. The rest — contrast,
+in particular — belongs to the brand layer and must be checked there.
+
+- **Focus ring** on everything interactive via `:focus-visible`, 3px (4px above
+  2400px), following the system radius. Never `outline: none` without a
+  replacement.
+- **Touch targets** at least 44px, with space between them. Use `data-tap` on
+  anything visually smaller that must still be tappable.
+- **Text sizes** never below 16px for body copy or form fields.
+- **Measure** enforced, so no line runs past 66 characters.
+- **Reduced motion** blanketed, then corrected: colour and tint changes stay,
+  only travel goes. Nothing may end on a wrong frame or disappear.
+- **Skip link** present, visible on focus.
+- **`scroll-padding-top`** set from `--nav-h`, so an anchor never lands under a
+  fixed header. Leave `--nav-h` at `0px` when the page carries no header.
+- Semantic HTML first. A `<div>` with a click handler is a bug. One `<h1>`;
+  headings descend without skipping; every `<section>` takes `aria-labelledby`.
+
+---
+
+## 11. Code style
 
 - **No leading zeros**: `.16em`, `.25vw`, `rgba(0, 0, 0, .08)`. Never `0.16em`.
 - **No unit on zero**: `padding: 0`, never `0px`.
-- **Hex lowercase**, shortened where it shortens: `#fff`.
-- **Logical properties** where one exists: `padding-block`, `inline-size`.
-- **Tokens over values.** If you are typing a hex or a bare pixel size, check
-  whether a token already says it.
+- **Logical properties** where one exists: `padding-block`, `inline-size`,
+  `margin-inline`, `border-block-end`.
+- **Tokens over values.** If you are typing a bare pixel size, check whether a
+  token already says it. If none does, add one — do not inline it.
+- **`rem` for anything that should scale, `px` for anything that must not.**
+  Getting this wrong is the one way to break the large-display behaviour.
 - **No `!important`** outside the reduced-motion blanket.
-- Section banners divide the stylesheet; the file opens with one naming the page.
-- JS: `'use strict'`, `defer`, `const`/`let`, no `var`, no jQuery.
+- Media queries in `rem` for layout breakpoints, `px` for the root steps. Note
+  that `rem` in a media query always resolves against 16px, never against the
+  stepped root — which is what keeps breakpoints from moving under themselves.
 
 **Comments explain why, not what** — the rejected alternative, the measurement
-behind a number, the bug the rule fixes. A comment that restates the property is
-noise. A comment carrying a measurement is the most valuable kind, because it is
+behind a number, the bug the rule fixes. A comment that restates the property
+is noise; one carrying a measurement is the most valuable kind, because it is
 the thing nobody can recover later.
-
-```css
-/* Was a jump straight to the brand navy, which read louder than the primary
-   button beside it. This is the same ring the active step already uses. */
-.btn--quiet:hover { border-color: #c3d6ea; }
-```
 
 ---
 
-## 14. Write the decisions down
+## 12. Write the decisions down
 
-When something is settled by a measurement, or is a deliberate exception to a
-guideline, it is a **decision record** — not a comment buried at line 287.
+When something is settled by a measurement, or is a deliberate exception, it is
+a **decision record** — not a comment buried at line 287.
 
 Keep them in `decisions/`, numbered, one per file:
 
@@ -396,47 +398,21 @@ Keep them in `decisions/`, numbered, one per file:
 ## What breaks if this changes
 ```
 
-Write one when it touches several rules or every page, when it is a deliberate
-exception, when you had to measure something, or when you can imagine someone
-overturning it next year without knowing what breaks. Not for an ordinary rule.
-
----
-
-## 15. More than one page for the same client
-
-The moment a second page exists, the stylesheet splits in two: the shared system
-first, that page's own block after it, behind a prefix.
-
-> **Fix the shared half upstream and carry it across, never inside a page.**
-> A page that patches it drifts, and the next page inherits the drift.
-
-Carry the system **whole** — leave the parts a page has no use for. Pruning
-page-by-page produces subsets that diverge, and the next fix has to be merged by
-hand instead of pasted. The rent is some dead CSS; the return is that a fix is
-one paste.
+Write one when it touches several rules, when it is a deliberate exception,
+when you had to measure something, or when you can imagine someone overturning
+it next year without knowing what breaks. Not for an ordinary rule.
 
 ---
 
 ## Before you say it is done
 
-- [ ] Every claim traces to the source copy or the FACTS block
-- [ ] No `PLACEHOLDER`, no lorem, no invented figure
-- [ ] Canonical, `og:url` and JSON-LD `@id` agree and point at the real route
-- [ ] `og:image` exists, 1200×630
-- [ ] Typeface embedded; zero external requests (check the network panel)
-- [ ] No `<style>`, no `style=`, no inline `<script>` body
 - [ ] 320 → 5120px, no horizontal overflow, every disclosure open
-- [ ] Tabbed through: ring visible, nothing trapped
-- [ ] Contrast checked on every text pair
-- [ ] Reduced motion on: nothing snapped, nothing hidden
-- [ ] Every CTA clicked
-
----
-
-## How to work
-
-- **Ask before inventing.** Missing copy, an unconfirmed route, an ambiguous
-  claim — ask. A wrong fact on a client page costs more than a round trip.
-- **Show the whole page**, at real widths, not a snippet.
-- **Say what you did not do.** If something was left out or could not be
-  confirmed, name it. Do not let it surface at launch.
+- [ ] Checked at real CSS-pixel widths, not device presets
+- [ ] Body copy never under 16px; form fields never under 16px
+- [ ] No line of prose past 66 characters at any width
+- [ ] Every tappable thing clears 44px
+- [ ] Tabbed through: ring visible everywhere, nothing trapped
+- [ ] Reduced motion on: nothing snapped to a wrong frame, nothing hidden
+- [ ] No bare pixel size in the page's own block
+- [ ] Nothing in `rem` that should have been `px`, or the reverse
+- [ ] Contrast checked in the brand layer

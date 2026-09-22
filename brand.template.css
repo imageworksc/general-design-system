@@ -1,0 +1,170 @@
+/* ==========================================================================
+   Brand layer — template
+   ==========================================================================
+
+   The second stylesheet. system.css settles the geometry; this one assigns
+   colour and typeface to the slots it leaves open.
+
+   Load it AFTER system.css.
+
+   THE RULE
+   This file changes colour, typeface and the single radius token. It does not
+   change a size, a gap, a width or a breakpoint. If it wants to, the geometry
+   is wrong and belongs fixed in system.css — otherwise every client ends up
+   with a slightly different system and there is no system.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1 · THE TYPEFACE
+   Embedded, not linked: a Google Fonts <link> costs a DNS lookup, a handshake,
+   a CSS fetch and only then the font — most of a second of invisible text on
+   the one screen that has to land.
+
+     base64 -w0 fonts/your-face.woff2
+
+   Ship the font's licence alongside it. Most open faces (SIL OFL) require the
+   licence text to travel with the file, including when it is embedded.
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'BRAND_FACE';
+  font-style: normal;
+  font-weight: 300 800;              /* the range the variable file carries */
+  font-display: swap;
+  src: url(data:font/woff2;base64,PASTE_PAYLOAD_HERE) format("woff2");
+}
+
+:root {
+  /* ------------------------------------------------------------------
+     2 · PRIMITIVES
+     The brand's raw values, named literally. Take them out of the client's
+     live stylesheet — not a screenshot, not a brand PDF. A brand guide says
+     the blue is one thing; the site has been shipping something slightly
+     different for years, and that is what people recognise.
+
+     Nothing outside layer 3 should reference these.
+     ------------------------------------------------------------------ */
+  --brand-deep: #______;        /* the darkest brand colour  */
+  --brand-mid: #______;         /* the mid tone              */
+  --brand-action: #______;      /* carries a button          */
+  --brand-action-ink: #______;  /* the same hue, dark enough to carry TEXT —
+                                   a bright brand green or yellow will not
+                                   clear AA on white and needs this pair */
+
+  --grey-900: #______;          /* body copy      */
+  --grey-600: #______;          /* secondary copy */
+  --grey-400: #______;          /* metadata       */
+  --grey-200: #______;          /* hairlines      */
+  --grey-050: #______;          /* alternate band ground */
+  --white: #ffffff;
+
+  --danger-ink: #______;
+  --danger-soft: #______;
+
+  /* ------------------------------------------------------------------
+     3 · SEMANTIC — what those values are FOR.
+     Every rule reads these, never the primitives. That is what lets a dark
+     band re-point a handful of names and have every child flip for free.
+     ------------------------------------------------------------------ */
+  --color-heading: var(--brand-deep);
+  --color-text: var(--grey-900);
+  --color-muted: var(--grey-600);
+  --color-faint: var(--grey-400);
+  --color-link: var(--brand-mid);
+  --color-action: var(--brand-action);
+  --color-action-text: var(--brand-action-ink);
+  --color-on-action: var(--white);
+
+  --surface-page: var(--white);
+  --surface-band: var(--grey-050);
+  --surface-card: var(--white);
+  --border-hairline: var(--grey-200);
+  --border-hover: #______;
+
+  --ring-color: var(--brand-action);
+
+  /* ------------------------------------------------------------------
+     4 · TYPE AND SHAPE
+     The only two things here that are not colour. Sizes stay in system.css.
+     ------------------------------------------------------------------ */
+  --font: 'BRAND_FACE', system-ui, -apple-system, 'Segoe UI', Roboto,
+          Helvetica, Arial, sans-serif;
+
+  --weight-body: 400;
+  --weight-emphasis: 700;
+  --weight-heading: 800;
+
+  --radius: ___px;   /* ONE value. Buttons, cards, inputs, panels. */
+}
+
+/* --------------------------------------------------------------------------
+   5 · APPLYING IT
+   system.css sets the geometry of these elements and leaves the paint to here.
+   -------------------------------------------------------------------------- */
+body {
+  font-family: var(--font);
+  font-weight: var(--weight-body);
+  color: var(--color-text);
+  background: var(--surface-page);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-heading);
+  font-weight: var(--weight-heading);
+}
+
+.lead { font-size: var(--text-lead); line-height: var(--leading-lead); color: var(--color-muted); }
+.lead strong { color: var(--color-heading); font-weight: var(--weight-emphasis); }
+
+.band--tint { background: var(--surface-band); }
+
+.btn--solid {
+  background: var(--color-action);
+  border-color: var(--color-action);
+  color: var(--color-on-action);
+}
+.btn--quiet {
+  background: transparent;
+  border-color: var(--border-hairline);
+  color: var(--color-heading);
+  font-weight: 600;
+}
+.btn--quiet:hover { border-color: var(--border-hover); }
+
+.field {
+  background: var(--surface-card);
+  border-color: var(--border-hairline);
+  color: var(--color-text);
+}
+.field:focus { border-color: var(--color-link); }
+/* :user-invalid, never :invalid — a required field must not turn red before
+   it has been touched. */
+.field:user-invalid { border-color: var(--danger-ink); background: var(--danger-soft); }
+
+.card {
+  background: var(--surface-card);
+  box-shadow: 0 1px 3px rgb(0 0 0 / .06), 0 14px 34px rgb(0 0 0 / .08);
+}
+
+.rule-list > li { border-color: var(--border-hairline); }
+
+.chip { background: var(--danger-soft); color: var(--color-action-text); }
+
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline-color: var(--ring-color);
+}
+
+/* --------------------------------------------------------------------------
+   6 · A DARK BAND
+   Re-point the semantic layer; every child follows. Note that no primitive is
+   renamed to its opposite — `--brand-deep: #fff` would work and is exactly the
+   line that stops the next reader. Layer 3 exists so it never has to happen.
+   -------------------------------------------------------------------------- */
+.band--dark {
+  --color-heading: var(--white);
+  --color-text: rgb(255 255 255 / .82);
+  --color-muted: rgb(255 255 255 / .70);
+  --border-hairline: rgb(255 255 255 / .16);
+
+  background: var(--brand-deep);
+  color: var(--color-text);
+}

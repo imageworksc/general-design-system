@@ -1,0 +1,454 @@
+/* ==========================================================================
+   Structural design system
+   ==========================================================================
+
+   Space, size, measure, grid and layout. Brand-agnostic by construction:
+   there is not one colour and not one typeface in this file, and there should
+   never be. Drop it in, add the brand's palette and face on top, and the
+   geometry is already settled.
+
+   THE ONE IDEA
+   Everything structural is in `rem`, and the root steps at four widths. So a
+   4K display does not get the same 17px text inside the same 1180px column —
+   it gets the whole page scaled up together, and a line of prose stays at the
+   same 66 characters from a 360px phone to a 5K panel.
+
+   That is why there are no per-breakpoint overrides for forty tokens below.
+   There is one override, for the root, and everything follows it.
+
+   WHAT STAYS IN PIXELS
+   Anything that should not grow with the page: hairlines, the focus ring,
+   and shadow geometry. They are listed together at the end of the token block.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1 · THE SCALING ANCHOR
+   Percentages, not pixels, so a visitor who has set a larger default text size
+   keeps it — their setting multiplies ours instead of being overwritten.
+
+   1800  a 1920 display
+   2400  5K at default scaling, or 4K at 150%
+   3200  4K at 100%  (a 5120px 5K panel is served by this step too — the shell
+                      stops growing before then, on purpose)
+   -------------------------------------------------------------------------- */
+html { font-size: 100%; }                                  /* 16px */
+
+@media (min-width: 1800px) { html { font-size: 112.5%; } } /* 18px */
+@media (min-width: 2400px) { html { font-size: 125%; } }   /* 20px */
+@media (min-width: 3200px) { html { font-size: 143.75%; } }/* 23px */
+
+:root {
+  /* ------------------------------------------------------------------
+     2 · SPACE
+     A 4px grid expressed in rem, so it scales with the root. The names are
+     the multiple, not a t-shirt size: --space-6 is six units, which is
+     24px at the base and 34.5px at 4K.
+     ------------------------------------------------------------------ */
+  --space-1:  0.25rem;   /*  4px */
+  --space-2:  0.5rem;    /*  8px */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+  --space-16: 4rem;      /* 64px */
+  --space-20: 5rem;      /* 80px */
+  --space-24: 6rem;      /* 96px */
+  --space-32: 8rem;      /* 128px */
+
+  /* Vertical rhythm between bands, fluid inside each step so it tightens on
+     a phone without needing its own breakpoint. */
+  --band-y: clamp(var(--space-12), 8vw, var(--space-24));
+  --band-y-snug: clamp(var(--space-8), 5vw, var(--space-16));
+
+  /* The page's side padding. Fluid, floored for small phones. */
+  --gutter: clamp(1.125rem, 4vw, 2.5rem);   /* 18 → 40px at base */
+
+  /* ------------------------------------------------------------------
+     3 · TYPE SIZES
+     Typeface-agnostic. Each step is fluid between its floor (what a 320px
+     phone gets) and its cap (the design width), and the whole ladder rises
+     again at each root step.
+
+     16px is a floor, not a preference: under it body copy is hard to read and
+     iOS zooms the page on any focused input.
+     ------------------------------------------------------------------ */
+  --text-xs:   clamp(0.78rem, .18vw + .75rem, 0.845rem);  /* 12.5 → 13.5 */
+  --text-sm:   clamp(0.875rem, .2vw + .84rem, 0.9375rem); /*   14 → 15   */
+  --text-base: clamp(1rem, .25vw + .95rem, 1.0625rem);    /*   16 → 17   */
+  --text-lead: clamp(1.03rem, .4vw + .97rem, 1.125rem);   /* 16.5 → 18   */
+  --text-h3:   clamp(1.375rem, 1.1vw + 1.125rem, 1.75rem);/*   22 → 28   */
+  --text-h2:   clamp(1.75rem, 2.6vw + 1.125rem, 2.75rem); /*   28 → 44   */
+  --text-h1:   clamp(1.875rem, 3vw + 1.25rem, 3.5rem);    /*   30 → 56   */
+  --text-display: clamp(2rem, 4.2vw + .5rem, 4.5rem);     /*   32 → 72   */
+
+  /* Line height tightens as size grows — a display line at 1.6 looks loose,
+     a body line at 1.2 is unreadable. */
+  --leading-body: 1.6;
+  --leading-lead: 1.7;
+  --leading-heading: 1.2;
+  --leading-display: 1.08;
+
+  /* Tracking goes negative as size grows, for the same reason. */
+  --tracking-heading: -.018em;
+  --tracking-display: -.032em;
+
+  /* ------------------------------------------------------------------
+     4 · WIDTH AND MEASURE
+     In rem, so the column and the type grow together and the line length
+     stays constant. This is the whole 4K story: prose measures the same 66
+     characters at every step.
+     ------------------------------------------------------------------ */
+  --w-prose:   43rem;    /* 688px at base — a single column of body copy */
+  --w-content: 55rem;    /* 880px — prose plus a figure or an aside      */
+  --w-shell:   73.75rem; /* 1180px — the page's main column              */
+  --w-wide:    85rem;    /* 1360px — for a grid that earns extra room    */
+
+  /* How wide a run of text is allowed to get, in characters. Belt and
+     braces with --w-prose: whichever is narrower wins. */
+  --measure: 66ch;
+  --measure-tight: 46ch;   /* a ruled list, a caption */
+  --measure-heading: 21ch; /* a section heading        */
+  --measure-display: 16ch; /* a hero headline          */
+
+  /* ------------------------------------------------------------------
+     5 · GRID
+     Twelve columns, because twelve divides by 2, 3, 4 and 6 — every split a
+     marketing page needs. The gutter scales with the root.
+     ------------------------------------------------------------------ */
+  --grid-columns: 12;
+  --grid-gap: var(--space-6);
+  --grid-gap-tight: var(--space-4);
+
+  /* ------------------------------------------------------------------
+     6 · COMPONENT GEOMETRY
+     Heights and insets only. No colour, no border style, no shadow colour —
+     those come from the brand layer.
+     ------------------------------------------------------------------ */
+  --control-h: 3.375rem;        /* 54px — button and field height     */
+  --control-h-lg: 3.625rem;     /* 58px — the closing band's primary  */
+  --control-h-sm: 2.75rem;      /* 44px — a compact control           */
+  --control-px: 1.625rem;       /* 26px — horizontal inset            */
+  --control-gap: 0.6875rem;     /* 11px — label to its icon           */
+
+  --field-h: 3.25rem;           /* 52px */
+  --field-px: 0.875rem;         /* 14px */
+  --textarea-min-h: 9.375rem;   /* 150px */
+
+  --card-px: clamp(var(--space-5), 2.6vw, var(--space-8));
+  --card-py: clamp(var(--space-6), 3vw, var(--space-10));
+
+  --icon-sm: 0.75rem;   /* 12px — inside a chip      */
+  --icon: 0.9375rem;    /* 15px — beside a label     */
+  --icon-lg: 1.5rem;    /* 24px — a section mark     */
+  --chip: 1.375rem;     /* 22px — the icon well      */
+
+  /* The smallest a tappable thing may be. Not negotiable, not scaled down. */
+  --touch-min: 44px;
+
+  /* ------------------------------------------------------------------
+     7 · SHAPE AND MOTION
+     --radius is the one value the brand overrides. Everything else here is
+     geometry the brand has no opinion about.
+     ------------------------------------------------------------------ */
+  --radius: 2px;             /* pick one and hold it everywhere */
+  --radius-round: 50%;       /* icon wells only */
+
+  --ease: cubic-bezier(.16, .84, .44, 1);
+  --duration-fast: .25s;     /* hover, focus            */
+  --duration: .35s;          /* colour, disclosure      */
+  --duration-slow: .7s;      /* an entrance             */
+
+  /* ---- deliberately NOT in rem: these should not grow with the page ---- */
+  --hairline: 1px;
+  --ring-width: 3px;
+  --ring-offset: 0px;
+}
+
+/* Hairlines get a hair thicker on very large displays, or they disappear
+   against type that has doubled in size. */
+@media (min-width: 2400px) {
+  :root { --hairline: 1.5px; --ring-width: 4px; }
+}
+
+/* --------------------------------------------------------------------------
+   8 · BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  /* clip, not hidden: hidden makes body a scroll container and breaks
+     position: sticky anywhere on the page */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  line-height: var(--leading-heading);
+  letter-spacing: var(--tracking-heading);
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-h1); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
+
+p { margin: 0; text-wrap: pretty; max-width: var(--measure); }
+ul, ol, dl, dd { margin: 0; padding: 0; }
+li { list-style: none; }
+figure, blockquote { margin: 0; }
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; }
+
+/* An anchor must not land under a fixed header. Set --nav-h to its height,
+   or leave it at 0 when the page carries no header of its own. */
+html { --nav-h: 0px; scroll-padding-top: calc(var(--nav-h) + var(--space-4)); }
+
+/* --------------------------------------------------------------------------
+   9 · LAYOUT PRIMITIVES
+   Five of them. Almost every section on a marketing page is a combination.
+   -------------------------------------------------------------------------- */
+
+/* The page's column. Every band has one inside it. */
+.wrap {
+  width: 100%;
+  max-width: var(--w-shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.wrap--prose { max-width: calc(var(--w-prose) + var(--gutter) * 2); }
+.wrap--content { max-width: calc(var(--w-content) + var(--gutter) * 2); }
+.wrap--wide { max-width: calc(var(--w-wide) + var(--gutter) * 2); }
+
+/* A full-width horizontal slab. Alternate grounds so the page reads in
+   sections rather than one scroll. */
+.band { padding-block: var(--band-y); }
+.band--snug { padding-block: var(--band-y-snug); }
+.band--flush-top { padding-block-start: 0; }
+
+/* Vertical rhythm inside a band. */
+.stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+.stack > * { margin: 0; }
+.stack--tight { gap: var(--space-3); }
+.stack--loose { gap: var(--space-8); }
+.stack--center { align-items: center; text-align: center; }
+
+/* A row that wraps instead of overflowing — button rows, tag rows, meta rows. */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+.cluster--tight { gap: var(--space-2); }
+.cluster--between { justify-content: space-between; }
+
+/* Two columns that become one. --split-at is where it breaks; --split-ratio
+   is how the space divides above that. */
+.split {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: 1fr;
+}
+@media (min-width: 60rem) {   /* 960px at base */
+  .split { grid-template-columns: var(--split-ratio, 1fr 1fr); }
+  .split--sidebar { --split-ratio: 2fr 1fr; }
+  .split--aside { --split-ratio: 1fr 2fr; }
+}
+
+/* --------------------------------------------------------------------------
+   10 · GRID
+   Twelve columns above 768px, six between 640 and 768, four below. A child
+   spans with --span; it simply takes the full row on the smaller grids.
+   -------------------------------------------------------------------------- */
+.grid {
+  display: grid;
+  gap: var(--grid-gap);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.grid > * { grid-column: span 4; }
+
+@media (min-width: 40rem) {   /* 640px */
+  .grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .grid > * { grid-column: span var(--span-sm, 6); }
+}
+@media (min-width: 48rem) {   /* 768px */
+  .grid { grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr)); }
+  .grid > * { grid-column: span var(--span, 12); }
+}
+
+/* The common cases, so a page does not have to set --span by hand. */
+.grid--2 > * { --span-sm: 3; --span: 6; }
+.grid--3 > * { --span-sm: 3; --span: 4; }
+.grid--4 > * { --span-sm: 3; --span: 3; }
+
+/* An auto grid, for card sets whose count is not known ahead of time.
+   --card-min is the narrowest a card may get before the row drops one. */
+.grid--auto {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--card-min, 17rem), 100%), 1fr));
+}
+.grid--auto > * { grid-column: auto; }
+
+/* --------------------------------------------------------------------------
+   11 · COMPONENT GEOMETRY
+   Shape only. Colour, border style and shadow come from the brand layer.
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--control-gap);
+  min-height: var(--control-h);
+  min-width: var(--touch-min);
+  padding-inline: var(--control-px);
+  border-radius: var(--radius);
+  border: 1.5px solid transparent;
+  font: inherit;
+  font-size: var(--text-base);
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform var(--duration-fast) var(--ease),
+              background-color var(--duration-fast) var(--ease),
+              border-color var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease);
+}
+.btn--lg { min-height: var(--control-h-lg); padding-inline: var(--space-8); }
+.btn--sm { min-height: var(--control-h-sm); padding-inline: var(--space-5); }
+.btn:hover { transform: translateY(-3px); }
+.btn:active { transform: translateY(-1px); }
+
+/* Below 40rem a button row gives each button the full width rather than
+   letting two sit cramped side by side. */
+@media (max-width: 39.99rem) {
+  .cluster--buttons { width: 100%; }
+  .cluster--buttons > .btn { flex: 1 1 100%; }
+}
+
+.field {
+  width: 100%;
+  min-height: var(--field-h);
+  padding-inline: var(--field-px);
+  border-radius: var(--radius);
+  border: var(--hairline) solid;
+  font: inherit;
+  /* Never below 16px, or iOS zooms the page on focus. */
+  font-size: max(1rem, var(--text-base));
+}
+.field--area {
+  min-height: var(--textarea-min-h);
+  padding-block: var(--field-px);
+  line-height: var(--leading-body);
+  resize: vertical;
+}
+
+.card {
+  border-radius: var(--radius);
+  padding: var(--card-py) var(--card-px);
+}
+
+.chip {
+  inline-size: var(--chip);
+  block-size: var(--chip);
+  border-radius: var(--radius-round);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.chip > svg { inline-size: var(--icon-sm); block-size: var(--icon-sm); }
+
+.icon { flex: none; inline-size: var(--icon); block-size: var(--icon); }
+.icon--lg { inline-size: var(--icon-lg); block-size: var(--icon-lg); }
+
+/* A ruled list: rows between hairlines, no card. */
+.rule-list > li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-block-end: var(--hairline) solid;
+}
+.rule-list > li:first-child { border-block-start: var(--hairline) solid; }
+
+/* --------------------------------------------------------------------------
+   12 · ACCESSIBILITY GEOMETRY
+   -------------------------------------------------------------------------- */
+:where(a, button, summary, input, select, textarea, [tabindex]):focus-visible {
+  outline: var(--ring-width) solid;
+  outline-offset: var(--ring-offset);
+  border-radius: var(--radius);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-2); left: var(--space-2);
+  z-index: 200;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius);
+  transform: translateY(-200%);
+}
+.skip-link:focus-visible { transform: translateY(0); }
+
+/* Anything tappable clears the minimum, whatever its visual size. */
+:where(a, button)[data-tap] {
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+}
+
+/* --------------------------------------------------------------------------
+   13 · MOTION
+   Blanket the durations, then keep colour and tint — only the travel goes.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .btn:hover, .btn:active { transform: none; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* Scroll entrance. The flag goes on the root from script, so content is never
+   left hidden when the script does not run. */
+[data-anim="on"] [data-reveal] {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity var(--duration-slow) var(--ease),
+              transform var(--duration-slow) var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+[data-anim="on"] [data-reveal].is-revealed { opacity: 1; transform: none; }
+
+/* --------------------------------------------------------------------------
+   14 · PRINT
+   -------------------------------------------------------------------------- */
+@media print {
+  .band { padding-block: var(--space-6); }
+  [data-anim="on"] [data-reveal] { opacity: 1; transform: none; }
+  .skip-link { display: none; }
+}
