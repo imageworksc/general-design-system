@@ -18,23 +18,23 @@ fact that `.cluster` uses a 16px gap does not.
 
 | # | Decision | Status |
 | --- | --- | --- |
-| [0001](0001-rem-and-a-stepping-root.md) | Everything structural in `rem`, with a root that steps | Settled |
-| [0002](0002-percentage-root-not-pixels.md) | The root steps in percentages, never pixels | Settled |
-| [0003](0003-what-stays-in-pixels.md) | Hairlines, the focus ring and touch minimums stay in `px` | Settled |
-| [0004](0004-the-shell-stops-growing.md) | The shell stops near 1700px, and 5120 gets no step | Settled |
-| [0005](0005-no-new-columns-at-4k.md) | A large display gets the same layout, scaled | Settled |
-| [0006](0006-no-colour-no-typeface.md) | No colour and no typeface in the system, ever | Settled |
-| [0007](0007-sixteen-pixel-floor.md) | Body copy and form fields never go under 16px | Settled |
-| [0008](0008-twelve-columns-two-collapses.md) | Twelve columns, collapsing to six and then four | Settled |
+| [1](1-rem-and-a-stepping-root.md) | Everything structural in `rem`, with a root that steps | Settled |
+| [2](2-percentage-root-not-pixels.md) | The root steps in percentages, never pixels | Settled |
+| [3](3-what-stays-in-pixels.md) | Hairlines, the focus ring and touch minimums stay in `px` | Settled |
+| [4](4-the-shell-stops-growing.md) | The shell stops near 1700px, and 5120 gets no step | Settled |
+| [5](5-no-new-columns-at-4k.md) | A large display gets the same layout, scaled | Settled |
+| [6](6-no-colour-no-typeface.md) | No colour and no typeface in the system, ever | Settled |
+| [7](7-sixteen-pixel-floor.md) | Body copy and form fields never go under 16px | Settled |
+| [8](8-twelve-columns-two-collapses.md) | Twelve columns, collapsing to six and then four | Settled |
 
-**0001 is the one to read first.** Everything else assumes it.
+**1 is the one to read first.** Everything else assumes it.
 
 ## The template
 
 ```markdown
-# NNNN · Title
+# N · Title
 
-**Status** Settled | Open | Superseded by NNNN
+**Status** Settled | Open | Superseded by N
 **Date** YYYY-MM-DD
 **Touches** which files or rules
 

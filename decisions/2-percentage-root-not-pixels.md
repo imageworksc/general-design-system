@@ -1,4 +1,4 @@
-# 0002 · The root steps in percentages, never pixels
+# 2 · The root steps in percentages, never pixels
 
 **Status** Settled
 **Date** 2026-09-22

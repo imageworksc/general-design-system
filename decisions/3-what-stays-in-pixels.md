@@ -1,4 +1,4 @@
-# 0003 · Hairlines, the focus ring and touch minimums stay in `px`
+# 3 · Hairlines, the focus ring and touch minimums stay in `px`
 
 **Status** Settled
 **Date** 2026-09-22
@@ -14,7 +14,7 @@ Three things do not scale with the root:
 --touch-min: 44px;
 ```
 
-Everything else structural is `rem` ([0001](0001-rem-and-a-stepping-root.md)).
+Everything else structural is `rem` ([1](1-rem-and-a-stepping-root.md)).
 
 ## Why
 

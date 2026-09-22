@@ -1,4 +1,4 @@
-# 0006 · No colour and no typeface in the system, ever
+# 6 · No colour and no typeface in the system, ever
 
 **Status** Settled
 **Date** 2026-09-22

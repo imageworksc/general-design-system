@@ -1,4 +1,4 @@
-# 0001 · Everything structural in `rem`, with a root that steps
+# 1 · Everything structural in `rem`, with a root that steps
 
 **Status** Settled
 **Date** 2026-09-22
@@ -36,7 +36,7 @@ length does not move across the entire range.
 
 The ability to tune one token independently at one breakpoint. Everything moves
 together or not at all; a token needing its own curve has to leave the `rem`
-system deliberately (see [0003](0003-what-stays-in-pixels.md)).
+system deliberately (see [3](3-what-stays-in-pixels.md)).
 
 We also gave up the alternative this replaced: restating forty tokens inside
 each of three media queries. That version works — it is what the ImageWorks

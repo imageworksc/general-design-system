@@ -1,4 +1,4 @@
-# 0008 · Twelve columns, collapsing to six and then four
+# 8 · Twelve columns, collapsing to six and then four
 
 **Status** Settled
 **Date** 2026-09-22

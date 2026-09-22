@@ -1,4 +1,4 @@
-# 0007 · Body copy and form fields never go under 16px
+# 7 · Body copy and form fields never go under 16px
 
 **Status** Settled
 **Date** 2026-09-22

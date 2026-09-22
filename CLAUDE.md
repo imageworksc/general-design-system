@@ -358,7 +358,10 @@ in particular — belongs to the brand layer and must be checked there.
 
 ## 11. Code style
 
-- **No leading zeros**: `.16em`, `.25vw`, `rgba(0, 0, 0, .08)`. Never `0.16em`.
+- **No leading zeros — anywhere.** In CSS: `.16em`, `.25vw`, `rgba(0, 0, 0, .08)`,
+  never `0.16em`. In anything we number: decision records are `1-`, `9-`, `10-`,
+  never `0001-`. The zero-padded form buys lexical sorting and costs readability
+  everywhere else; we take the readability.
 - **No unit on zero**: `padding: 0`, never `0px`.
 - **Logical properties** where one exists: `padding-block`, `inline-size`,
   `margin-inline`, `border-block-end`.
@@ -384,16 +387,16 @@ When something is settled by a measurement, or is a deliberate exception, it is
 a **decision record** — not a comment buried at line 287.
 
 **This system has eight of them, in [decisions/](decisions/).** Read
-[0001](decisions/0001-rem-and-a-stepping-root.md) before changing anything
+[1](decisions/1-rem-and-a-stepping-root.md) before changing anything
 above 1800px — everything else assumes it. Read the relevant record before
 overruling a rule; most of what looks arbitrary was measured.
 
 Keep new ones in `decisions/`, numbered, one per file:
 
 ```markdown
-# NNNN · Title
+# N · Title
 
-**Status** Settled | Open | Superseded by NNNN
+**Status** Settled | Open | Superseded by N
 **Date** YYYY-MM-DD
 **Touches** which files or pages
 

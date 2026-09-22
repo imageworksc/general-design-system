@@ -1,4 +1,4 @@
-# 0005 · A large display gets the same layout, scaled — never more columns
+# 5 · A large display gets the same layout, scaled — never more columns
 
 **Status** Settled
 **Date** 2026-09-22

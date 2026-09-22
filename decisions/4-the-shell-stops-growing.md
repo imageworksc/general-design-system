@@ -1,4 +1,4 @@
-# 0004 · The shell stops near 1700px, and 5120 gets no step of its own
+# 4 · The shell stops near 1700px, and 5120 gets no step of its own
 
 **Status** Settled
 **Date** 2026-09-22
@@ -12,7 +12,7 @@
 
 ## Why
 
-The shell grows for the reason in [0001](0001-rem-and-a-stepping-root.md): a
+The shell grows for the reason in [1](1-rem-and-a-stepping-root.md): a
 fixed 1180px column on a 3840px panel is a stripe. But the growth has to end
 somewhere, and the limit is set by reading, not by the screen.
 
