@@ -17,6 +17,11 @@ Two stylesheets:
 And **[`CLAUDE.md`](CLAUDE.md)** — the guidelines behind both, written so an AI
 assistant or a new developer works inside the system instead of around it.
 
+**[`decisions/`](decisions/)** holds eight records on the choices that shape
+more than the rule they sit on — why the root steps, why the shell stops, why a
+4K display gets no extra columns. Read the record before overruling a rule;
+most of what looks arbitrary was measured.
+
 ---
 
 ## The idea
@@ -67,8 +72,8 @@ margins, and that is the right answer rather than a compromise.
    recognise.
 3. **Build** with the layout primitives — `.wrap`, `.band`, `.stack`,
    `.cluster`, `.split` — and the twelve-column `.grid`.
-4. **Write the decisions down** as you make them, in `decisions/`. Template in
-   CLAUDE.md §12.
+4. **Write the decisions down** as you make them, in [`decisions/`](decisions/).
+   Template in that folder, and in CLAUDE.md §12.
 
 ### What goes where
 

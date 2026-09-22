@@ -383,7 +383,12 @@ the thing nobody can recover later.
 When something is settled by a measurement, or is a deliberate exception, it is
 a **decision record** — not a comment buried at line 287.
 
-Keep them in `decisions/`, numbered, one per file:
+**This system has eight of them, in [decisions/](decisions/).** Read
+[0001](decisions/0001-rem-and-a-stepping-root.md) before changing anything
+above 1800px — everything else assumes it. Read the relevant record before
+overruling a rule; most of what looks arbitrary was measured.
+
+Keep new ones in `decisions/`, numbered, one per file:
 
 ```markdown
 # NNNN · Title
