@@ -7,26 +7,64 @@ client. What does not change is the geometry — how far apart things sit, how
 large text gets, how wide a line may run, how a layout divides, and how all of
 it behaves from a 320px phone to a 5K display.
 
-What ships:
+---
+
+## Start here — download `CLAUDE.md`
+
+**[`CLAUDE.md`](CLAUDE.md) is the file to download.** It is the entire system in
+one Markdown file. Put it where your AI assistant reads its always-on rules and
+every page it builds from then on follows the system — the spacing scale, the
+type ladder, the grid, the 4K behaviour, the accessibility floor, all of it.
+
+```bash
+curl -O https://raw.githubusercontent.com/imageworksc/general-design-system/main/CLAUDE.md
+```
+
+Or open [CLAUDE.md](CLAUDE.md) here in GitHub and use the **download raw file**
+button at the top right of the file view.
+
+### Where to put it
+
+| Tool | Put it at | What happens |
+| --- | --- | --- |
+| **Claude Code** | `CLAUDE.md` in your project root | Loads automatically at the start of every session in that repo. Nothing to invoke, nothing to remember. |
+| **Claude.ai / Claude desktop** | Project → **Set project instructions** → paste the whole file | Read on every message in that project. On a Team plan, share the project so everyone works from one copy instead of their own. |
+| **Cursor** | `.cursorrules` | |
+| **Codex** | `AGENTS.md` | |
+| **Copilot** | `.github/copilot-instructions.md` | |
+
+### Then just ask for the page
+
+> Build a landing page from the attached copy.
+
+The rules are already loaded. You do not have to repeat them, paste them, or
+remember which ones matter for this particular page — and neither does the next
+person on the team.
+
+**That one file is enough to start.** Everything else in this repo is what you
+add when you want more:
+
+- [`system.css`](system.css) + [`brand.template.css`](brand.template.css) — the
+  actual stylesheets, if you want the geometry as code rather than as rules
+- [`.claude/skills/client-page/`](.claude/skills/client-page/SKILL.md) — the
+  build procedure as an invocable skill, `/client-page`
+- [`decisions/`](decisions/) — why the rules are what they are
+
+Nothing in the content is tool-specific. It is Markdown and CSS.
+
+---
+
+## What ships
 
 | | |
 | --- | --- |
+| **[`CLAUDE.md`](CLAUDE.md)** | **The guidelines.** The file to download — the whole system, readable on its own. |
 | **[`system.css`](system.css)** | The geometry. Complete, no blanks, drop it in as-is. |
 | **[`brand.template.css`](brand.template.css)** | The paint. Only blanks — colours, the typeface, the one radius. |
 | **[`index.template.html`](index.template.html)** | A starter page with the primitives already assembled: hero, a card grid, a split, a ruled list, a FAQ, a form and a closing band. |
 | **[`reveal.js`](reveal.js)** | Scroll entrances, if the page uses them. Delete it if not. |
-
-And **[`CLAUDE.md`](CLAUDE.md)** — the guidelines behind all of it, written so
-an AI assistant or a new developer works inside the system instead of around it.
-
-**[`.claude/skills/client-page/`](.claude/skills/client-page/SKILL.md)** is the build
-procedure as an invocable skill — `/client-page` in Claude Code, and Claude
-reaches for it on its own when the task is a client page.
-
-**[`decisions/`](decisions/)** holds eight records on the choices that shape
-more than the rule they sit on — why the root steps, why the shell stops, why a
-4K display gets no extra columns. Read the record before overruling a rule;
-most of what looks arbitrary was measured.
+| **[`.claude/skills/client-page/`](.claude/skills/client-page/SKILL.md)** | The build procedure as an invocable skill. |
+| **[`decisions/`](decisions/)** | Eight records on the choices that shape more than the rule they sit on. Read the record before overruling a rule; most of what looks arbitrary was measured. |
 
 ---
 
@@ -63,7 +101,7 @@ margins, and that is the right answer rather than a compromise.
 
 ---
 
-## Using it
+## Building a page with the stylesheets
 
 ```html
 <link rel="stylesheet" href="system.css">
@@ -94,22 +132,6 @@ margins, and that is the right answer rather than a compromise.
 
 If the brand layer wants to move a size, the geometry is wrong. Fix it in
 `system.css` rather than letting one client drift.
-
----
-
-## Installing it for an AI assistant
-
-Wherever your tool reads always-on rules:
-
-| Tool | Path |
-| --- | --- |
-| Claude Code | `CLAUDE.md` at the repo root — loads automatically |
-| Claude.ai | Project instructions, with both stylesheets as knowledge |
-| Cursor | `.cursorrules` |
-| Codex | `AGENTS.md` |
-| Copilot | `.github/copilot-instructions.md` |
-
-Nothing in the content is tool-specific — it is Markdown and CSS.
 
 ---
 

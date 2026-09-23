@@ -11,6 +11,16 @@ from a 320px phone to a 5K display.
 Drop in [`system.css`](system.css), add the brand's palette and typeface on
 top, and the structure is already settled.
 
+> **Using this file on its own?** That is what it is for. Put it where your
+> assistant reads always-on rules — `CLAUDE.md` in a repo root for Claude Code,
+> project instructions on Claude.ai, `.cursorrules`, `AGENTS.md`,
+> `.github/copilot-instructions.md` — and every page built in that project
+> follows the system without anyone having to repeat it.
+>
+> The stylesheets, the starter page and the decision records live alongside it
+> at
+> [github.com/imageworksc/general-design-system](https://github.com/imageworksc/general-design-system).
+
 ---
 
 ## 1. What this owns, and what it does not
